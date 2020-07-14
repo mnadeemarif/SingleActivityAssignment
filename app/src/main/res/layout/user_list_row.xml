@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="6dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/picR"
         android:layout_width="100sp"
@@ -15,7 +23,7 @@
         android:id="@+id/nameR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/picR"
         android:textSize="28sp"
         android:textColor="#232F34"/>
@@ -36,7 +44,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/emailR"
         android:layout_marginLeft="0dp"
+        android:layout_marginBottom="3dp"
         android:layout_toRightOf="@id/picR"
         android:textColor="#344955"
         android:textSize="18sp" />
-</RelativeLayout>
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

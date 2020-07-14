@@ -1,5 +1,6 @@
 package com.csgradqau.singleactivityassignment.data.model;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder> {
+public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder>{
     private Context context;
     private List<user> userList;
 
@@ -34,6 +35,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder
             email = view.findViewById(R.id.emailR);
             profile = view.findViewById(R.id.picR);
             dob = view.findViewById(R.id.dobR);
+
         }
     }
 
