@@ -56,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(user.COLUMN_DOB, dob);
         values.put(user.COLUMN_GENDER, gender);
         values.put(user.COLUMN_HOBBIES, hobbies);
-        values.put(user.COLUMN_PROFILE, String.valueOf(profile));
+        values.put(user.COLUMN_PROFILE, profile);
 
 
         // insert row

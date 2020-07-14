@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/picR"
         android:layout_width="100sp"
@@ -12,6 +15,7 @@
         android:id="@+id/nameR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
         android:layout_toRightOf="@id/picR"
         android:textSize="28sp"
         android:textColor="#232F34"/>
@@ -22,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/nameR"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/picR"
         android:textColor="#344955"
         android:textSize="22sp" />
@@ -33,7 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/emailR"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/picR"
         android:textColor="#344955"
         android:textSize="18sp" />

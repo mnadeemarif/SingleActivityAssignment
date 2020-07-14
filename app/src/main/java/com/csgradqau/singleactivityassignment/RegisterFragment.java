@@ -37,6 +37,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -56,6 +58,7 @@ public class RegisterFragment extends Fragment {
     private user a;
     private static final int PICK_IMAGE = 100;
     private DatabaseHelper db;
+    Uri imageUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,11 @@ public class RegisterFragment extends Fragment {
                 else
                     a.setGender(0);
                 a.setHobbies(hobbies.getText().toString());
-                a.setProfile(imageViewToByte(profile));
+                try {
+                    a.setProfile(imageViewToByte(profile));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 long id = db.registerUser(a.getEmail(),a.getPassword(),a.getName(),a.getDob(),a.getGender(),a.getHobbies(),a.getProfile());
                 if (id!=-1)
                 {
@@ -190,7 +197,6 @@ public class RegisterFragment extends Fragment {
 
                     }*/
                     if (resultCode == RESULT_OK){
-                        Uri imageUri;
                         imageUri = data.getData();
                         profile.setImageURI(imageUri);
                     }
@@ -199,9 +205,9 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private byte [] imageViewToByte(ImageView img)
-    {
-        Bitmap bmp = ((BitmapDrawable)img.getDrawable()).getBitmap();
+    private byte [] imageViewToByte(ImageView img) throws IOException {
+        //Bitmap bmp = ((BitmapDrawable)img.getDrawable()).getBitmap();
+        Bitmap bmp = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
         ByteArrayOutputStream op =  new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG,100,op);
         byte [] byteArray = op.toByteArray();
