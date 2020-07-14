@@ -54,6 +54,7 @@ public class homeFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 16));
         recyclerView.setAdapter(adapter);
+        toggleEmptyUsers();
         return v;
     }
     private void toggleEmptyUsers() {

@@ -26,8 +26,6 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder
         public TextView name;
         public TextView email;
         public TextView dob;
-        public TextView gender;
-        public TextView hobbies;
         public ImageView profile;
 
         public UserViewHolder(View view) {
@@ -35,6 +33,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder
             name = view.findViewById(R.id.nameR);
             email = view.findViewById(R.id.emailR);
             profile = view.findViewById(R.id.picR);
+            dob = view.findViewById(R.id.dobR);
         }
     }
 
@@ -57,15 +56,11 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
         user usr = userList.get(position);
-
-        holder.name.setText(usr.getName());
-
-
-        holder.email.setText(usr.getEmail());
-
-
         Bitmap bitmap = BitmapFactory.decodeByteArray(usr.getProfile(), 0, usr.getProfile().length);
         holder.profile.setImageBitmap((bitmap));
+        holder.name.setText(usr.getName());
+        holder.email.setText(usr.getEmail());
+        holder.dob.setText(usr.getDob());
     }
 
     @Override
@@ -73,21 +68,5 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder
         return userList.size();
     }
 
-    /**
-     * Formatting timestamp to `MMM d` format
-     * Input: 2018-02-21 00:15:42
-     * Output: Feb 21
-     */
-    private String formatDate(String dateStr) {
-        try {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = fmt.parse(dateStr);
-            SimpleDateFormat fmtOut = new SimpleDateFormat("MMM d");
-            return fmtOut.format(date);
-        } catch (ParseException e) {
 
-        }
-
-        return "";
-    }
 }
