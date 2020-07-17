@@ -136,7 +136,7 @@
         <AutoCompleteTextView
             android:id="@+id/hobbies"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="64dp"
             android:ems="10"
             android:inputType="textAutoComplete"
             tools:layout_editor_absoluteX="100dp"

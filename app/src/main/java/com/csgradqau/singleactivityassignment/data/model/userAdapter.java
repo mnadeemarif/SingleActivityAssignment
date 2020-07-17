@@ -37,6 +37,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.UserViewHolder
             dob = view.findViewById(R.id.dobR);
 
         }
+
     }
 
 

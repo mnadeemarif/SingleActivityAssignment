@@ -1,7 +1,10 @@
 package com.csgradqau.singleactivityassignment;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -11,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.csgradqau.singleactivityassignment.data.model.DatabaseHelper;
 import com.csgradqau.singleactivityassignment.data.model.MyDividerItemDecoration;
+import com.csgradqau.singleactivityassignment.data.model.RecyclerTouchListener;
 import com.csgradqau.singleactivityassignment.data.model.user;
 import com.csgradqau.singleactivityassignment.data.model.userAdapter;
 
@@ -26,9 +32,12 @@ public class homeFragment extends Fragment {
     View v;
     private userAdapter adapter;
     private List<user> userList = new ArrayList<>();
-    private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
+    EditText email;
     private TextView noUserView;
+    sendMessage SM;
+    Bundle data;
+    userFragment uf;
 
     private DatabaseHelper db;
 
@@ -43,17 +52,37 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_home, container, false);
+        db = new DatabaseHelper(getActivity());
         recyclerView = v.findViewById(R.id.recycler_view);
         noUserView = v.findViewById(R.id.empty);
-        db = new DatabaseHelper(getActivity());
-        userList.addAll(db.getAllUsers());
-
+        userList = db.getAllUsers();
         adapter = new userAdapter(getActivity(), userList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 16));
         recyclerView.setAdapter(adapter);
+        data = new Bundle();
+        //email = v.findViewById(R.id.email);
+        uf = new userFragment();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
+                recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                Toast.makeText(getActivity(),"Pressed", Toast.LENGTH_LONG).show();
+                user a = userList.get(position);
+                data.putString("email",a.getEmail().toString());
+                uf.setArguments(data);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,uf).commit();
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+            }
+        }));
+
         toggleEmptyUsers();
         return v;
     }
@@ -66,4 +95,9 @@ public class homeFragment extends Fragment {
             noUserView.setVisibility(View.VISIBLE);
         }
     }
+
+}
+
+interface sendMessage{
+    String sendData(String data);
 }

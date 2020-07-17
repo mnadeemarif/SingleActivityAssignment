@@ -1,6 +1,8 @@
 package com.csgradqau.singleactivityassignment;
 
 import android.app.DatePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -25,7 +27,7 @@ public class userFragment extends Fragment {
     EditText name,email,dob;
     EditText gender;
     ImageView profile;
-    AutoCompleteTextView hobbies;
+    EditText hobbies;
     View v;
     private user a;
     private DatabaseHelper db;
@@ -43,15 +45,15 @@ public class userFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v =  inflater.inflate(R.layout.fragment_user, container, false);
-
-        a = new user();
-        profile = (ImageView) v.findViewById(R.id.profilePicture);
-        back = (Button) v.findViewById(R.id.back);
-        name = (EditText) v.findViewById(R.id.name);
-        email = (EditText) v.findViewById(R.id.email);
-        dob = (EditText) v.findViewById(R.id.dob);
-        gender =  v.findViewById(R.id.genderU);
-        hobbies = v.findViewById(R.id.hobbies);
+        Bundle data = this.getArguments();
+        //a = new user();
+        profile = (ImageView) v.findViewById(R.id.user_pic);
+        back = (Button) v.findViewById(R.id.user_back);
+        name = (EditText) v.findViewById(R.id.user_name);
+        email = (EditText) v.findViewById(R.id.user_email);
+        dob = (EditText) v.findViewById(R.id.user_dob);
+        gender =  v.findViewById(R.id.user_gender);
+        hobbies = v.findViewById(R.id.user_hobbies);
         name.setKeyListener(null);
         email.setKeyListener(null);
         dob.setKeyListener(null);
@@ -66,8 +68,21 @@ public class userFragment extends Fragment {
         });
 
         db = new DatabaseHelper(getActivity());
+        a  = db.getUser(data.getString("email"));
+        //profile.setImageBitmap((Bitmap)a.getProfile());
+        name.setText(a.getName().toString());
+        email.setText(a.getEmail().toString());
+        dob.setText(a.getDob().toString());
+        hobbies.setText(a.getHobbies());
+        if (a.getGender() == 1)
+            gender.setText("Male");
+        else
+            gender.setText("Female");
 
-
+        byte[] blob=a.getProfile();
+        Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
+        //ImageView image=new ImageView(getActivity());
+        profile.setImageBitmap(bmp);
 
         return v;
     }

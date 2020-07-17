@@ -22,9 +22,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/profilePicture"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:id="@+id/user_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:src="@drawable/ic_add_a_photo_black_24dp" />
     </com.google.android.material.card.MaterialCardView>
@@ -43,7 +43,7 @@
         app:startIconDrawable="@drawable/ic_person_black_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
+            android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -67,7 +67,7 @@
         app:startIconDrawable="@drawable/ic_email_black_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
+            android:id="@+id/user_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -90,7 +90,7 @@
         app:startIconDrawable="@drawable/ic_cake_black_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dob"
+            android:id="@+id/user_dob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -111,12 +111,12 @@
         app:layout_constraintTop_toBottomOf="@+id/dobL"
         app:startIconDrawable="@drawable/ic_sports_soccer_black_24dp">
 
-        <AutoCompleteTextView
-            android:id="@+id/hobbies"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_hobbies"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="match_parent"
             android:ems="10"
-            android:inputType="textAutoComplete"
+            android:inputType="text"
             tools:layout_editor_absoluteX="100dp"
             tools:layout_editor_absoluteY="317dp" />
 
@@ -138,13 +138,14 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/user_gender"
             android:ems="10"
             android:inputType="date" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/back"
+        android:id="@+id/user_back"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
