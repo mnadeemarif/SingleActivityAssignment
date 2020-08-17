@@ -14,6 +14,8 @@ import android.os.Bundle;
 
 import com.csgradqau.singleactivityassignment.data.model.DatabaseHelper;
 import com.csgradqau.singleactivityassignment.data.model.user;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -31,10 +33,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,6 +68,7 @@ public class RegisterFragment extends Fragment {
     private static final int PICK_IMAGE = 100;
     private DatabaseHelper db;
     Uri imageUri;
+    FirebaseDatabase f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +82,7 @@ public class RegisterFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_register, container, false);
         a = new user();
+
         profile = (ImageView) v.findViewById(R.id.profilePicture);
         register = (Button) v.findViewById(R.id.register);
         name = (EditText) v.findViewById(R.id.name);
@@ -96,6 +107,13 @@ public class RegisterFragment extends Fragment {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                f = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = f.getReference("users");
+                FirebaseStorage fbStorage = FirebaseStorage.getInstance();
+                StorageReference myStoreRef = fbStorage.getReference("profile_pics");
+                String u_id = myRef.push().getKey();
+                String _email = email.getText().toString().trim();
+                a.setId(u_id);
                 a.setEmail(email.getText().toString());
                 a.setPassword(password.getText().toString());
                 a.setName(name.getText().toString());
@@ -107,12 +125,35 @@ public class RegisterFragment extends Fragment {
                     a.setGender(0);
                 a.setHobbies(hobbies.getText().toString());
                 try {
-                    a.setProfile(imageViewToByte(profile));
-                } catch (IOException e) {
+                    //a.setProfile(imageViewToByte(profile));
+                    //profile.setDrawingCacheEnabled(true);
+                    //profile.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable) profile.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    UploadTask uploadTask = myStoreRef.child(u_id).putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                            // ...
+                        }
+                    });
+                    a.setProfile(u_id);
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                long id = db.registerUser(a.getEmail(),a.getPassword(),a.getName(),a.getDob(),a.getGender(),a.getHobbies(),a.getProfile());
-                if (id!=-1)
+
+                myRef.child(u_id).setValue(a);
+                //long id = db.registerUser(a.getEmail(),a.getPassword(),a.getName(),a.getDob(),a.getGender(),a.getHobbies(),a.getProfile());
+                if (!u_id.equals(""))
                 {
                     Toast.makeText(getActivity(), "User Registered !", Toast.LENGTH_LONG).show();
                 }

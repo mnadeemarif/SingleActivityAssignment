@@ -108,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(user.COLUMN_DOB)),
                 cursor.getInt(cursor.getColumnIndex(user.COLUMN_GENDER)),
                 cursor.getString(cursor.getColumnIndex(user.COLUMN_HOBBIES)),
-                cursor.getBlob(cursor.getColumnIndex(user.COLUMN_PROFILE)));
+                cursor.getString(cursor.getColumnIndex(user.COLUMN_PROFILE)));
 
         // close the db connection
         cursor.close();
@@ -135,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 usr.setDob(cursor.getString(cursor.getColumnIndex(user.COLUMN_DOB)));
                 usr.setGender(cursor.getInt(cursor.getColumnIndex(user.COLUMN_GENDER)));
                 usr.setHobbies(cursor.getString(cursor.getColumnIndex(user.COLUMN_HOBBIES)));
-                usr.setProfile(cursor.getBlob(cursor.getColumnIndex(user.COLUMN_PROFILE)));
+                usr.setProfile(cursor.getString(cursor.getColumnIndex(user.COLUMN_PROFILE)));
 
                 users.add(usr);
             } while (cursor.moveToNext());

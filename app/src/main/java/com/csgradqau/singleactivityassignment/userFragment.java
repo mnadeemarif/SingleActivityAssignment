@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,9 +18,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.csgradqau.singleactivityassignment.data.model.DatabaseHelper;
+import com.csgradqau.singleactivityassignment.data.model.GlideApp;
 import com.csgradqau.singleactivityassignment.data.model.user;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class userFragment extends Fragment {
 
@@ -30,7 +39,7 @@ public class userFragment extends Fragment {
     EditText hobbies;
     View v;
     private user a;
-    private DatabaseHelper db;
+    //private DatabaseHelper db;
     Uri imageUri;
 
 
@@ -47,6 +56,8 @@ public class userFragment extends Fragment {
         v =  inflater.inflate(R.layout.fragment_user, container, false);
         Bundle data = this.getArguments();
         //a = new user();
+        assert data != null;
+        user current = (user) data.get("user");
         profile = (ImageView) v.findViewById(R.id.user_pic);
         back = (Button) v.findViewById(R.id.user_back);
         name = (EditText) v.findViewById(R.id.user_name);
@@ -67,22 +78,45 @@ public class userFragment extends Fragment {
             }
         });
 
-        db = new DatabaseHelper(getActivity());
-        a  = db.getUser(data.getString("email"));
+        //db = new DatabaseHelper(getActivity());
+        //a  = db.getUser(data.getString("email"));
         //profile.setImageBitmap((Bitmap)a.getProfile());
-        name.setText(a.getName().toString());
-        email.setText(a.getEmail().toString());
-        dob.setText(a.getDob().toString());
-        hobbies.setText(a.getHobbies());
-        if (a.getGender() == 1)
+        name.setText(current.getName().toString());
+        email.setText(current.getEmail().toString());
+        dob.setText(current.getDob().toString());
+        hobbies.setText(current.getHobbies());
+        if (current.getGender() == 1)
             gender.setText("Male");
         else
             gender.setText("Female");
 
-        byte[] blob=a.getProfile();
-        Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
+//        byte[] blob=a.getProfile();
+        //Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
         //ImageView image=new ImageView(getActivity());
-        profile.setImageBitmap(bmp);
+        //profile.setImageBitmap(bmp);
+
+        FirebaseStorage fs = FirebaseStorage.getInstance();
+        String img = "profile_pics/"+current.getId();
+        StorageReference stRef = fs.getReference(img);
+        GlideApp.with(this).load(stRef).into(profile);
+//        final long ONE_MEGABYTE = 1024 * 1024;
+//        stRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                // Data for "images/island.jpg" is returns, use this as needed
+//                Toast.makeText(getActivity(), "in onSuccess", Toast.LENGTH_LONG).show();
+//                Bitmap bmp= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                profile.setImageBitmap(bmp);
+//                Toast.makeText(getActivity(), "finished job", Toast.LENGTH_LONG).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                Toast.makeText(getActivity(), "failed", Toast.LENGTH_LONG).show();
+//            }
+//        });
+
 
         return v;
     }

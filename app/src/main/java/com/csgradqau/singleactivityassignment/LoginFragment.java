@@ -2,8 +2,11 @@ package com.csgradqau.singleactivityassignment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,12 @@ import com.csgradqau.singleactivityassignment.data.model.DatabaseHelper;
 import com.csgradqau.singleactivityassignment.data.model.user;
 import com.google.android.material.datepicker.MaterialTextInputPicker;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class LoginFragment extends Fragment {
@@ -26,7 +35,9 @@ public class LoginFragment extends Fragment {
     private TextInputLayout email,password;
     private View view;
     private DatabaseHelper db;
-    user l;
+    String f_pass;
+    Boolean flag;
+    Bundle usr;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,13 +55,52 @@ public class LoginFragment extends Fragment {
         register = (Button) view.findViewById(R.id.registerf);
         email = (TextInputLayout) view.findViewById(R.id.emailL);
         password = (TextInputLayout) view.findViewById(R.id.password);
-        l = new user();
-        db = new DatabaseHelper(getActivity());
+        //l = new user();
+        //db = new DatabaseHelper(getActivity());
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (db.checkUserExist(email.getEditText().getText().toString()))
+                //Toast.makeText(getActivity(), "Clicked !", Toast.LENGTH_LONG).show();
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users");
+                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                         for (DataSnapshot dt : dataSnapshot.getChildren()){
+                             //Toast.makeText(getActivity(), "help : "+dt.child("email").getValue().toString(), Toast.LENGTH_LONG).show();
+                             if(dt.child("email").getValue().toString().equals(email.getEditText().getText().toString()))
+                             {
+                                 f_pass = dt.child("password").getValue().toString().trim();
+                                 //Toast.makeText(getActivity(), "help : "+f_pass, Toast.LENGTH_LONG).show();
+                                 if (f_pass.equals(password.getEditText().getText().toString().trim())){
+                                     Toast.makeText(getActivity(), "Logged In!!!", Toast.LENGTH_LONG).show();
+                                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new homeFragment()).commit();
+                                 }
+                                 else {
+                                     Toast.makeText(getActivity(), "User Doesn't Exist Please Register !", Toast.LENGTH_LONG).show();
+                                 }
+
+                             }
+
+
+                            //flag = true;
+                            //f_pass = dataSnapshot.child(email.getEditText().getText().toString()).child("password").getValue(String.class);
+                            //usr.putString("email",email.getEditText().getText().toString().trim());
+                            //usr.putString("email",email.getEditText().getText().toString().trim());
+                            //usr.putString("email",email.getEditText().getText().toString().trim());
+                         }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                //Query checkuser = myRef.orderByChild("email").equalTo(email.getEditText().getText().toString());
+
+               /* if (db.checkUserExist(email.getEditText().getText().toString()))
                 {
                     l = db.getUser(email.getEditText().getText().toString());
                     //Toast.makeText(getActivity(), email.getEditText().getText().toString(), Toast.LENGTH_LONG).show();
@@ -62,7 +112,7 @@ public class LoginFragment extends Fragment {
                 }
                 else {
                     Toast.makeText(getActivity(), "User Doesn't Exist Please Register !", Toast.LENGTH_LONG).show();
-                }
+                }*/
             }
         });
 

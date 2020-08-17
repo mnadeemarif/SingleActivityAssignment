@@ -23,6 +23,12 @@ import com.csgradqau.singleactivityassignment.data.model.MyDividerItemDecoration
 import com.csgradqau.singleactivityassignment.data.model.RecyclerTouchListener;
 import com.csgradqau.singleactivityassignment.data.model.user;
 import com.csgradqau.singleactivityassignment.data.model.userAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +58,39 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_home, container, false);
-        db = new DatabaseHelper(getActivity());
+        //db = new DatabaseHelper(getActivity());
         recyclerView = v.findViewById(R.id.recycler_view);
         noUserView = v.findViewById(R.id.empty);
-        userList = db.getAllUsers();
+        //userList = db.getAllUsers();
         adapter = new userAdapter(getActivity(), userList);
+        FirebaseDatabase fd = FirebaseDatabase.getInstance();
+        DatabaseReference ref = fd.getReference("users");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+                for (DataSnapshot dt : dataSnapshot.getChildren()){
+                    Toast.makeText(getActivity(), "in Loop", Toast.LENGTH_LONG).show();
+                    user u = (user) dt.getValue(user.class);
+                    userList.add(u);
+                    //Toast.makeText(getActivity(), "user : " +u.getEmail(), Toast.LENGTH_LONG).show();
+                }
+                adapter.notifyDataSetChanged();
+                toggleEmptyUsers();
+            }
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //Toast.makeText(getActivity(), "Size : " +userList.size(), Toast.LENGTH_LONG).show();
+
+        Toast.makeText(getActivity(), "Size : "+userList.size(), Toast.LENGTH_LONG).show();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -73,6 +107,7 @@ public class homeFragment extends Fragment {
                 Toast.makeText(getActivity(),"Pressed", Toast.LENGTH_LONG).show();
                 user a = userList.get(position);
                 data.putString("email",a.getEmail().toString());
+                data.putSerializable("user",a);
                 uf.setArguments(data);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,uf).commit();
 
@@ -83,13 +118,13 @@ public class homeFragment extends Fragment {
             }
         }));
 
-        toggleEmptyUsers();
+        //stoggleEmptyUsers();
         return v;
     }
     private void toggleEmptyUsers() {
         // you can check notesList.size() > 0
 
-        if (db.getUserCount() > 0) {
+        if (userList.size() > 0) {
             noUserView.setVisibility(View.GONE);
         } else {
             noUserView.setVisibility(View.VISIBLE);

@@ -2,7 +2,9 @@ package com.csgradqau.singleactivityassignment.data.model;
 
 import android.graphics.drawable.Drawable;
 
-public class user {
+import java.io.Serializable;
+
+public class user implements Serializable {
     public static final String TABLE_NAME = "db_users";
 
     public static final String COLUMN_EMAIL = "email";
@@ -13,9 +15,9 @@ public class user {
     public static final String COLUMN_HOBBIES = "hobbies";
     public static final String COLUMN_PROFILE = "profile";
 
-    private String email,password,name,hobbies,dob;
+    private String id,email,password,name,hobbies,dob;
     private int gender;
-    private byte[] profile;
+    private String profile;
 
 
     // Create table SQL query
@@ -33,7 +35,7 @@ public class user {
     public user() {
     }
 
-    public user(String email, String password, String name, String dob, int gender, String hobbies ,byte[] profile) {
+    public user(String email, String password, String name, String dob, int gender, String hobbies ,String profile) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -69,6 +71,14 @@ public class user {
         this.name = name;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getHobbies() {
         return hobbies;
     }
@@ -93,11 +103,11 @@ public class user {
         this.gender = gender;
     }
 
-    public byte[] getProfile() {
+    public String getProfile() {
         return profile;
     }
 
-    public void setProfile(byte[] profile) {
+    public void setProfile(String profile) {
         this.profile = profile;
     }
 }

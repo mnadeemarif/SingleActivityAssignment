@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "277300572465",
+    "firebase_url": "https://madassignment-a9477.firebaseio.com",
+    "project_id": "madassignment-a9477",
+    "storage_bucket": "madassignment-a9477.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277300572465:android:48cd03faad3faf2e71c010",
+        "android_client_info": {
+          "package_name": "com.csgradqau.singleactivityassignment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277300572465-0ciods6ekiv569eg8nhbvid9njrdmud6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy665pdPeP5QXlqTV3j5Xgesvkd_8DKVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277300572465-0ciods6ekiv569eg8nhbvid9njrdmud6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
